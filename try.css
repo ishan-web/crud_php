@@ -1,0 +1,27 @@
+
+*{
+    margin: 0;
+}
+
+.navbar{   
+    display: flex;
+    position: relative;
+    background-color: grey;
+    padding: 10px;
+}
+.form{
+    display: flex;
+}
+li{
+    list-style: none; 
+}
+.txt{
+    color: rgb(255, 255, 255);  
+   padding: 10px; 
+    text-decoration: none;
+    
+}
+.txt:hover{
+    color:black;
+    cursor:pointer ;
+}
