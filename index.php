@@ -132,9 +132,9 @@
         </div>
     </div>
     <script
-  src="https://code.jquery.com/jquery-3.6.3.js"
-  integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
-  crossorigin="anonymous"></script>
+      src="https://code.jquery.com/jquery-3.6.3.js"
+      integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+      crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
       integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
       crossorigin="anonymous"></script> -->
@@ -149,10 +149,5 @@
       });
     </script>
 
-    <!-- <script>
-      $( document ).ready(function() {
-    alert( "ready!" );
-});
-    </script> -->
   </body>
 </html>
