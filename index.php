@@ -1,12 +1,15 @@
 <?php 
   //INSERT INTO `notes` (`sno`, `title`, `description`, `tstamp`) VALUES ('1', 'today', 'today is thursday and the day where barcelona will loose to manchester united.', current_timestamp());
   $insert = false;
+  $update = false;
+  $delete= false;
   //connect to the database
 
   $servername = "localhost";
   $username = "root"; 
   $password = "";
   $database = "notes";
+  
 
     // Create a connection
     $conn = mysqli_connect($servername, $username, $password, $database);
@@ -15,19 +18,38 @@
     if (!$conn){
         die("Sorry we failed to connect: ". mysqli_connect_error());
     }
-    
+    if (isset($_GET['delete'])){
+      $sno = $_GET['delete'];
+      $delete = true;
+      $sql = "DELETE FROM `notes` WHERE `sno` = $sno";
+      $result = mysqli_query($conn, $sql);
+    }
     if (isset($_POST['submit'])){
       if (isset($_POST['snoEdit'])){
-        echo "yes";
-        exit();
+          //update the record
+        $sno =$_POST['snoEdit'];
+        $title = $_POST["titleEdit"];
+        $description = $_POST["descriptionEdit"];
+
+        //sql query to be executed
+        $sql = "UPDATE `notes` SET `title` = '$title' , `description` = '$description' WHERE `notes`.`sno` = $sno";
+        $result = mysqli_query($conn, $sql);
+        
+      if($result){
+        $update=true;
+      }else{
+        echo "We could not update the record sucessfully!";
       }
+         
+      } 
+      else{
       $title = $_POST["title"];
       $description = $_POST["description"];
 
       //sql query to be executed
       $sql = "INSERT INTO `notes` (`title`, `description`) VALUES ('$title' , '$description')";
       $result = mysqli_query($conn, $sql);
-    
+
     //adding data to the table in the database
     if($result){
       // echo "the result has been sucessfully added to the database<br>";
@@ -37,6 +59,7 @@
 
     }
   }
+}
         ?>
 <!doctype html>
 <html lang="en">
@@ -130,6 +153,26 @@
           </div>";
           }
         ?>
+        <?php
+          if ($update){
+            echo "<div class='alert alert-success alert-dismissible fade show ' role='alert'>
+            <strong>Success!    </strong> Your note has been updated successfully.
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+            </button>
+          </div>";
+          }
+        ?>
+        <?php
+          if ($delete){
+            echo "<div class='alert alert-success alert-dismissible fade show ' role='alert'>
+            <strong>Success!    </strong> Your note has been deleted successfully.
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+            </button>
+          </div>";
+          }
+        ?>
         <div class="container my-3">
           <form method="POST" action="/php_crud/index.php?update=true">
             <div class="form-group">
@@ -166,12 +209,13 @@
             <th scope='row'>" . $sno . "</th>
             <td>". $row['title'] . "</td>
             <td>" . $row['description'] . "</td>
-            <td><button class='edit btn btn-sm btn-primary' id=". $row['sno'] . ">Edit</button></td>
+            <td><button class='edit btn btn-sm btn-primary' id=". $row['sno'] . ">Edit</button> 
+            <button class='delete btn btn-sm btn-danger' id=d". $row['sno'] . ">Delete</button></td>
           </tr>";
           }
         ?>
-        </tbody>
-      </table>
+            </tbody>
+          </table>
         </div>
     </div>
     <script
@@ -207,7 +251,24 @@
           $('#editModal').modal('toggle');
         })
       })
+    </script>
 
+<script>
+      deletes = document.getElementsByClassName('delete');
+      Array.from(deletes).forEach((element) => {
+        element.addEventListener("click", (e)=>{
+          console.log("edit", );
+          sno = e.target.id.substr(1,);
+
+         if(confirm("Are you sure you want to delete this note!")){
+          console.log("yes");
+          window.location = `/php_crud/index.php?delete=${sno}`;
+         }
+         else{
+          console.log("no");
+         }
+        })
+      })
     </script>
 
   </body>
