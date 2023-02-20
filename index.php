@@ -4,7 +4,7 @@
   //connect to the database
 
   $servername = "localhost";
-  $username = "root";
+  $username = "root"; 
   $password = "";
   $database = "notes";
 
@@ -17,6 +17,10 @@
     }
     
     if (isset($_POST['submit'])){
+      if (isset($_POST['snoEdit'])){
+        echo "yes";
+        exit();
+      }
       $title = $_POST["title"];
       $description = $_POST["description"];
 
@@ -47,9 +51,48 @@
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
 
     <title>PHP CRUD</title>
+    
   </head>
   <body>
+        <!-- edit modal
+    <button type="button" class="btn btn-primary" data-toggle="modal">
+      Edit
+    </button> -->
 
+    <!-- edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editLabel" >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editLabel"> the selected Note</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" >
+          <form method="POST" action="/php_crud/index.php">
+            <input type="hidden" name="snoEdit" id="snoEdit">
+            <div class="form-group">
+              <label for="title">Note Title</label>
+              <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp" placeholder="Enter a note">
+              <small id="textHelp" class="form-text text-muted">Write a title of the note.</small>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="description" class="mt-2">Note Description</label>
+              <textarea  class="form-control" id="descriptionEdit" name="descriptionEdit" style=" height: 100px; " placeholder="Description"></textarea>
+            </div>
+            <input type="submit"  class="btn btn-primary mb-3" name="submit" value="Update Note">
+
+          </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div >
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#"><img src="/crud/logo.svg" height="28px" alt=""></a>
@@ -88,7 +131,7 @@
           }
         ?>
         <div class="container my-3">
-          <form method="POST" action="/php_crud/index.php">
+          <form method="POST" action="/php_crud/index.php?update=true">
             <div class="form-group">
               <label for="title">Note Title</label>
               <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp" placeholder="Enter a note">
@@ -123,7 +166,7 @@
             <th scope='row'>" . $sno . "</th>
             <td>". $row['title'] . "</td>
             <td>" . $row['description'] . "</td>
-            <td>Action</td>
+            <td><button class='edit btn btn-sm btn-primary' id=". $row['sno'] . ">Edit</button></td>
           </tr>";
           }
         ?>
@@ -147,6 +190,24 @@
         
         $('#myTable').DataTable();
       });
+    </script>
+    <script>
+      edits = document.getElementsByClassName('edit');
+      Array.from(edits).forEach((element) => {
+        element.addEventListener("click", (e)=>{
+          console.log("edit", );
+          tr =  e.target.parentNode.parentNode;
+          title = tr.getElementsByTagName("td")[0].innerText;
+          description = tr.getElementsByTagName("td")[1].innerText;
+          console.log(title, description);
+          titleEdit.value = title;
+          descriptionEdit.value = description;
+          snoEdit.value = e.target.id;
+          console.log(e.target.id);
+          $('#editModal').modal('toggle');
+        })
+      })
+
     </script>
 
   </body>
