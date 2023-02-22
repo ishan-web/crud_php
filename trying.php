@@ -1,25 +1,3 @@
-<?php
-    $insert= false;
-
-    $conn= mysqli_connect("localhost", "root", "", "trying");
-
-    if(!$conn){
-        echo ("the connection with database is not successful:". mysqli_connect_error());
-    }
-    if(isset($_POST['submit'])){
-        $name = $_POST['name'];
-        $subject = $_POST['subject'];
-
-        //executing query
-        $sql = "INSERT INTO `trying` (`name`, `subject`) VALUES ('$name', '$subject')";
-        $result = mysqli_query($conn, $sql);
-    }
-    // if($result){
-    //     $insert =true;
-    // }else{
-    //     echo "the record has not been added successfully";
-    // }
-?>
 
 <html lang="en">
 <head>
@@ -32,7 +10,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="https://www.youtube.com/watch?v=L1-zCdrx8Lk&ab_channel=IAmDevGrant">Navbar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -40,21 +18,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
+        <a class="nav-link" href="http://localhost/php_crud/trying.php">Home <span class="sr-only">(current)</span></a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
@@ -63,13 +27,42 @@
     </form>
   </div>
 </nav>
-<!-- <?php 
-    // if($insert){
-    //     echo "alert('data added succesfully')";
-    // }
-?>   -->
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="container my-3">
+        <form method="POST" action="/php_crud/trying.php">
+        <input type="hidden" name="snoEdit" id="snoEdit">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name ="nameEdit" id="nameEdit" aria-describedby="emailHelp" placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label for="subject">Hobby</label>
+            <textarea type="text" class="form-control" name="subjectEdit" id="subjectEdit" placeholder="what is your hobby"></textarea>
+          </div>
+          <input type="submit" class="btn btn-primary" name="submit" value="Update">
+        </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container my-3">
-<form method="POST" action="/php_crud/trying.php">
+<form method="POST" action="/php_crud/trying.php?update=true">
   <div class="form-group">
     <label for="name">Name</label>
     <input type="text" class="form-control" name ="name" id="name" aria-describedby="emailHelp" placeholder="Enter your name">
@@ -92,20 +85,12 @@
     </tr>
   </thead>
   <tbody>
-  <?php
-    $sql= "SELECT * FROM `trying`";
-    $result = mysqli_query($conn, $sql);
-    $sno =0;
-    while($row= mysqli_fetch_assoc($result)){
-        $sno = $sno + 1;
-        echo "<tr>
-            <th scope='row'>" . $sno . "</th>
-            <td> ". $row['name'] . "</td>
-            <td>" . $row['subject'] . "</td>
-            <td>Action</td>
-        </tr>";
-    }
-  ?>
+    
+<?php
+  include 'insert.php';
+?>
+
+ 
   </tbody>
 </table>
 </div>
@@ -119,6 +104,24 @@
     $(document).ready( function () {
     $('#myTable').DataTable();
 } );
+</script>
+<script>
+  edits = document.getElementsByClassName('edit');
+  Array.from(edits).forEach((element) =>{
+    element.addEventListener("click", (e)=>{
+      console.log("edit", );
+      tr= e.target.parentNode.parentNode;
+      name = tr.getElementsByTagName('td')[1].innerText;
+      subject = tr.getElementsByTagName('td')[2].innerText;
+      sno = tr.getElementsByTagName('td')[0].innerText;
+      console.log(name, subject);
+      nameEdit.value = name;
+      subjectEdit.value = subject;
+      snoEdit.value = sno;
+      console.log(e.target.id);
+      $('#editModal').modal('toggle');
+    })
+  })
 </script>
 </body>
 </html>
