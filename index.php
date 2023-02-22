@@ -98,7 +98,7 @@
             <div class="form-group">
               <label for="title">Note Title</label>
               <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp" placeholder="Enter a note">
-              <small id="textHelp" class="form-text text-muted">Write a title of the note.</small>
+              <small id="textHelp" class="form-text text-muted">Write a title of the subject.</small>
             </div>
 
             <div class="form-group mb-3">
@@ -206,7 +206,7 @@
           while($row= mysqli_fetch_assoc($result)){
             $sno= $sno + 1;
            echo "<tr>
-            <th scope='row'>" . $sno . "</th>
+            <td scope='row'>" . $sno . "</td>
             <td>". $row['title'] . "</td>
             <td>" . $row['description'] . "</td>
             <td><button class='edit btn btn-sm btn-primary' id=". $row['sno'] . ">Edit</button> 
@@ -241,8 +241,8 @@
         element.addEventListener("click", (e)=>{
           console.log("edit", );
           tr =  e.target.parentNode.parentNode;
-          title = tr.getElementsByTagName("td")[0].innerText;
-          description = tr.getElementsByTagName("td")[1].innerText;
+          title = tr.getElementsByTagName("td")[1].innerText;
+          description = tr.getElementsByTagName("td")[2].innerText;
           console.log(title, description);
           titleEdit.value = title;
           descriptionEdit.value = description;
@@ -259,7 +259,6 @@
         element.addEventListener("click", (e)=>{
           console.log("edit", );
           sno = e.target.id.substr(1,);
-
          if(confirm("Are you sure you want to delete this note!")){
           console.log("yes");
           window.location = `/php_crud/index.php?delete=${sno}`;
@@ -270,6 +269,5 @@
         })
       })
     </script>
-
   </body>
 </html>
